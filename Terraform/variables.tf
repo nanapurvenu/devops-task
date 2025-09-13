@@ -1,32 +1,30 @@
-variable "region" {
-  description = "AWS Region"
+# App Name
+variable "app_name" {
+  description = "Name of the ECS application"
   type        = string
-  default     = "us-east-1"  
+  default     = "devops-task-app"
 }
 
-variable "app_name" {
-  description = "Application Name"
-  type        = string
-  default     = "devops-task"
-}  
-
+# Docker Image
 variable "docker_image" {
-  description = "Docker image to deploy"
+  description = "Docker image for ECS container"
   type        = string
   default     = "venureddy3417/devops-task:v1"  
 }
 
-variable "vpc_cidr" {
-  description = "CIDR block for VPC"
-  default     = "10.0.0.0/16"
+# AWS Region
+
+variable "region" {
+  description = "AWS region to deploy resources"
+  type        = string
+  default     = "ap-south-1"
 }
 
-variable "public_subnet_cidrs" {
-  description = "CIDR blocks for public subnets"
-  default     = ["10.0.1.0/24","10.0.2.0/24"]  # 2 subnets for high availability
-}
+# Optional: Desired ECS task count
 
 variable "desired_count" {
   description = "Number of ECS tasks to run"
+  type        = number
   default     = 1
 }
+
