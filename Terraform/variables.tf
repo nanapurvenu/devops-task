@@ -17,7 +17,7 @@ variable "docker_image" {
 variable "region" {
   description = "AWS region to deploy resources"
   type        = string
-  default     = "ap-south-1"
+  default     = "us-east-1"
 }
 
 # Optional: Desired ECS task count
