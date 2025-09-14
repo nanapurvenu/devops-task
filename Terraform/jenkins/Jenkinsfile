@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')  
-        DOCKER_IMAGE = "venureddy3417/devops-task"   // change if your repo name differs
+        DOCKER_IMAGE = "venureddy3417/devops-task"   
         DOCKER_TAG = "v1${env.BUILD_NUMBER}"
     }
 
