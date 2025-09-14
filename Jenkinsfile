@@ -2,13 +2,10 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('docker-hub-cred')  
+        DOCKERHUB_CREDENTIALS = credentials('docker-hub-cred')
         DOCKER_IMAGE = "venureddy3417/devops-task"
         DOCKER_TAG = "v1${env.BUILD_NUMBER}"
-    }
-
-    tools {
-        nodejs "NodeJS-20" // Name of NodeJS installation configured in Jenkins Global Tool Configuration
+        PATH = "/usr/bin:/usr/local/bin:${env.PATH}" // Make sure system Node.js is in PATH
     }
 
     stages {
@@ -20,6 +17,8 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
+                sh 'node -v'
+                sh 'npm -v'
                 sh 'npm install'
             }
         }
@@ -38,7 +37,7 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                withDockerRegistry([ credentialsId: 'docker-hub-cred', url: 'https://index.docker.io/v1/' ]) {
+                withDockerRegistry([credentialsId: 'docker-hub-cred', url: 'https://index.docker.io/v1/']) {
                     sh "docker push $DOCKER_IMAGE:$DOCKER_TAG"
                 }
             }
@@ -49,9 +48,9 @@ pipeline {
                 dir('Terraform') {
                     withCredentials([usernamePassword(credentialsId: 'aws-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                         sh '''
-                          terraform init -input=false
-                          terraform plan -input=false -var docker_image=$DOCKER_IMAGE:$DOCKER_TAG
-                          terraform apply -auto-approve -var docker_image=$DOCKER_IMAGE:$DOCKER_TAG
+                            terraform init -input=false
+                            terraform plan -input=false -var docker_image=$DOCKER_IMAGE:$DOCKER_TAG
+                            terraform apply -auto-approve -var docker_image=$DOCKER_IMAGE:$DOCKER_TAG
                         '''
                     }
                 }
