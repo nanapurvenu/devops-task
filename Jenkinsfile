@@ -5,6 +5,9 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('docker-hub-cred')  
         DOCKER_IMAGE = "venureddy3417/devops-task"   
         DOCKER_TAG = "v1${env.BUILD_NUMBER}"
+        AWS_REGION = "us-east-1"
+        ECS_CLUSTER = "devops-task-app"
+        ECS_SERVICE = "devops-task-service"
     }
 
     stages {
@@ -43,13 +46,26 @@ pipeline {
         stage('Deploy to ECS') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'aws-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh """
-                        aws ecs update-service \
-                          --cluster devops-task-app \
-                          --service devops-task-service \
-                          --force-new-deployment \
-                          --region us-east-1
-                    """
+                    script {
+                        // Check if ECS service exists
+                        def serviceExists = sh(
+                            script: "aws ecs describe-services --cluster $ECS_CLUSTER --services $ECS_SERVICE --region $AWS_REGION --query 'services[0].status' --output text",
+                            returnStatus: true
+                        ) == 0
+
+                        if (serviceExists) {
+                            echo "ECS service exists. Triggering a new deployment..."
+                            sh """
+                                aws ecs update-service \
+                                  --cluster $ECS_CLUSTER \
+                                  --service $ECS_SERVICE \
+                                  --force-new-deployment \
+                                  --region $AWS_REGION
+                            """
+                        } else {
+                            echo "ECS service not found! Skipping deployment."
+                        }
+                    }
                 }
             }
         }
