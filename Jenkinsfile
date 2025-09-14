@@ -3,31 +3,18 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-hub-cred')  
-        DOCKER_IMAGE = "venureddy3417/devops-task"   
+        DOCKER_IMAGE = "venureddy3417/devops-task"
         DOCKER_TAG = "v1${env.BUILD_NUMBER}"
-        PATH = "/usr/bin:$PATH"  
+    }
+
+    tools {
+        nodejs "NodeJS-20" // Name of NodeJS installation configured in Jenkins Global Tool Configuration
     }
 
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'dev', url: 'https://github.com/nanapurvenu/devops-task.git'
-            }
-        }
-
-        stage('Setup Node.js') {
-            steps {
-                sh '''
-                  #!/bin/bash
-                  if ! command -v node >/dev/null 2>&1; then
-                    echo "Node.js not found. Installing..."
-                    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-                    sudo apt-get install -y nodejs
-                  else
-                    echo "Node.js is already installed: $(node -v)"
-                  fi
-                  npm -v || echo "npm is installed with Node.js"
-                '''
             }
         }
 
