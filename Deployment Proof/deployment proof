@@ -1,0 +1,49 @@
+Jenkins pipeline success screenshot : https://github.com/user-attachments/assets/30d6fcdc-772a-4287-8b97-cc09dd39cd42
+
+ECS service screenshot :https://github.com/user-attachments/assets/e2f56551-9434-4be0-9ad5-274c4d482a1e
+2) https://github.com/user-attachments/assets/bbaf4c2e-6bbe-49c8-93ae-22013d37f72d
+3) https://github.com/user-attachments/assets/bd336264-236f-4ba8-959f-af7ac87e1b6
+4) https://github.com/user-attachments/assets/37e6cd8a-90b6-4788-924c-f299acaa044a
+5) https://github.com/user-attachments/assets/f933383f-de02-4eee-bee5-29fbded0675d
+
+Public URL of app: http://34.227.193.101:8080/
+---
+
+##  WRITEUP.md (Draft)
+
+```markdown
+# Write-up
+
+##  Tools & Services Used
+- **Jenkins** → CI/CD pipeline automation.
+- **Docker** → Containerization of application.
+- **AWS ECS (Fargate)** → Deployment & scaling of containers.
+- **Terraform** → Infrastructure provisioning.
+- **GitHub** → Code versioning & repo hosting.
+
+---
+
+##  Challenges Faced
+1. **Terraform Duplicate Resources**  
+   - Issue: Resources already existed in AWS.  
+   - Solution: Imported existing infra into Terraform state OR reused existing infra.
+
+2. **Jenkins Exiting Frequently**  
+   - Issue: Jenkins stopped due to insufficient memory/disk.  
+   - Solution: Restarted on a different port and cleaned workspace.
+
+3. **Docker Build “No Space Left”**  
+   - Issue: Jenkins server ran out of storage.  
+   - Solution: Cleaned unused Docker images & increased disk space.
+
+4. **Wrong ECS Cluster Name**  
+   - Issue: Jenkins pipeline failed with `ClusterNotFoundException`.  
+   - Solution: Updated Jenkinsfile with correct ECS cluster name (`devops-task-app`).
+
+---
+
+##  Improvements If Given More Time
+- Add **unit & integration tests** for Node.js app.  
+- Set up **monitoring & logging** with CloudWatch.  
+- Implement **blue-green or canary deployments**.  
+- Use **Terraform Cloud** or remote backend for infra state management.  

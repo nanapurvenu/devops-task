@@ -1,61 +1,58 @@
-# Logo Server
+# DevOps Task – CI/CD Pipeline with Jenkins, Docker, AWS ECS
 
-A simple Express.js web server that serves the Swayatt logo image.
+## Architecture Diagram
+![Architecture](https://github.com/user-attachments/assets/30d6fcdc-772a-4287-8b97-cc09dd39cd42)
 
-## What is this app?
+---
 
-This is a lightweight Node.js application built with Express.js that serves a single logo image (`logoswayatt.png`) when accessed through a web browser. When you visit the root URL, the server responds by displaying the Swayatt logo.
+## Setup Instructions
 
-## Prerequisites
+### 1. Clone Repository
+   bash
+git clone https://github.com/nanapurvenu/devops-task.git
+cd devops-task
 
-- Node.js (version 12 or higher)
-- npm (Node Package Manager)
+### 2. Build Docker Image Locally
+ docker build -t <venureddy3417/devops-task:v16 .
+ docker run -p 3000:3000 venureddy3417/devops-task:v16
 
-## Installation
+### 3. Jenkins Setup
 
-1. Clone or download this repository
-2. Navigate to the project directory:
-   ```bash
-   cd "devops task"
-   ```
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
+Install plugins:
+1) Git
 
-## How to Start the App
+2) NodeJS
 
-Run the following command:
-```bash
-npm start
-```
+3) Docker
 
-The server will start and display:
-```
-Server running on http://localhost:3000
-```
+4) Pipeline
 
-## Usage
+5) Configure:
 
-Once the server is running, open your web browser and navigate to:
-```
-http://localhost:3000
-```
+6) NodeJS tool (NodeJS-20)
 
-You will see the Swayatt logo displayed in your browser.
+7) DockerHub credentials
 
-## Project Structure
+8) AWS credentials
 
-```
-├── app.js              # Main server file
-├── package.json        # Project dependencies and scripts
-├── logoswayatt.png     # Logo image file
-└── README.md          # This file
-```
+### 4. AWS Setup
 
-## Technical Details
+ECS Cluster: devops-task-app
 
-- **Framework**: Express.js
-- **Port**: 3000
-- **Endpoint**: GET `/` - serves the logo image
-- **File served**: `logoswayatt.png`
+ECS Service: devops-task-service
+
+ALB + Target group already created via Terraform.
+
+### Pipeline Flow
+
+Checkout Code → Fetch from GitHub repo.
+
+Install Dependencies → npm install.
+
+Run Tests → (Skipped since no tests configured).
+
+Build Docker Image → Builds & tags image with commit version.
+
+Push Docker Image → Push to DockerHub.
+
+Deploy to ECS → Runs aws ecs update-service to trigger new deployment.
