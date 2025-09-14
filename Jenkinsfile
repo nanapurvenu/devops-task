@@ -45,10 +45,10 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'aws-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     sh """
                         aws ecs update-service \
-                            --cluster devops-task-cluster \
-                            --service devops-task-service \
-                            --force-new-deployment \
-                            --region us-east-1
+                          --cluster devops-task-app \
+                          --service devops-task-service \
+                          --force-new-deployment \
+                          --region us-east-1
                     """
                 }
             }
