@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')  
+        DOCKERHUB_CREDENTIALS = credentials('docker-hub-cred')  
         DOCKER_IMAGE = "venureddy3417/devops-task"   
         DOCKER_TAG = "v1${env.BUILD_NUMBER}"
     }
